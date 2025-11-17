@@ -1,0 +1,75 @@
+[project]
+name = "ml-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "Carlos Miranda", email = "carlos.miranda@buawei.com" }]
+requires-python = ">=3.12"
+dependencies = [
+  "alembic>=1.17.2",
+  "fastapi>=0.121.2",
+  "httpx>=0.28.1",
+  "psycopg2-binary>=2.9.11",
+  "pydantic>=2.12.4",
+  "pydantic-settings>=2.12.0",
+  "ray>=2.51.1",
+  "sqlalchemy>=2.0.44",
+  "uvicorn>=0.38.0",
+]
+
+[project.scripts]
+ml-backend = "ml_backend.main:main"
+
+[build-system]
+requires = ["uv_build>=0.9.7,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+source = "src/ml_backend"
+markers = ["disable_autouse"]
+addopts = ["-ra -p no:warnings"]
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "D"]
+ignore = ["D100", "D104", "D105", "D107"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.coverage.run]
+source = ["src/ml_backend"]
+branch = true
+omit = [
+  # Omit tests files
+  "*tests*",
+  #Omit main files
+  "*main*",
+  #Omit log and exception files
+  "*log*",
+  "*scripts*",
+  "*exception*",
+  "*_version.py*",
+]
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+  # Have to re-enable the standard pragma
+  "pragma: no cover",
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  "if self\\.debug",
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  "if __name__ == .__main__.:",
+  # Don't complain about abstract methods, they aren't run:
+  "@(abc\\.)?abstractmethod",
+]
+ignore_errors = true
+
+[tool.coverage.html]
+directory = "coverage_html_report"

@@ -1,0 +1,22 @@
+services:
+  api:
+    image: mlb
+    build: .
+    ports:
+      - 8000:8000
+
+  migrations:
+    image: mlb
+    command: /app/.venv/bin/alembic upgrade head
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  db:
